@@ -30,6 +30,12 @@ pub fn Vect3(comptime T: type) type {
             return .{ .data = self.data - tosub.data };
         }
 
+        pub inline fn div(self: Self, divr: Self) Self {
+            return .{
+                .data = self.data / divr.data,
+            };
+        }
+
         pub inline fn scale(self: Self, s: T) Self {
             return .{ .data = .{ self.X() * s, self.Y() * s, self.Z() * s } };
         }
