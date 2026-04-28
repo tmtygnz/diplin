@@ -36,6 +36,16 @@ pub fn Vect3(comptime T: type) type {
             };
         }
 
+        pub fn cross(self: Self, other: Self) Self {
+            return .{
+                .data = .{
+                    self.Y() * other.Z() - self.Z() * other.Y(),
+                    self.Z() * other.X() - self.X() * other.Z(),
+                    self.X() * other.Y() - self.Y() * other.X(),
+                },
+            };
+        }
+
         pub inline fn scale(self: Self, s: T) Self {
             return .{ .data = .{ self.X() * s, self.Y() * s, self.Z() * s } };
         }
@@ -54,6 +64,21 @@ pub fn Vect3(comptime T: type) type {
 
         pub inline fn length(self: Self) T {
             return std.math.sqrt(self.lsquared());
+        }
+
+        pub fn normalize(self: Self) Self {
+            const l = self.length();
+            if (l == 0) return self;
+            const inv_l = @as(T, 1.0) / l;
+            return self.scale(inv_l);
+        }
+
+        pub fn distanceSq(self: Self, other: Self) T {
+            return self.subtract(other).lsquared();
+        }
+
+        pub fn distance(self: Self, other: Self) T {
+            return std.math.sqrt(self.distanceSq(other));
         }
     };
 }
